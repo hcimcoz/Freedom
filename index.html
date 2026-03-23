@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom - Dates</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Hamdi - Freedom - Dates</h1>
+
+        <form id="entryForm">
+            <div class="form-row">
+                <div class="form-group date-type-group">
+                    <label>Tarih Tipi</label>
+                    <div class="toggle-switch">
+                        <button type="button" class="toggle-btn active" data-type="single">Tek Gün</button>
+                        <button type="button" class="toggle-btn" data-type="range">Tarih Aralığı</button>
+                    </div>
+                </div>
+
+                <div class="form-group date-inputs">
+                    <div id="singleDateWrapper">
+                        <label for="singleDate">Tarih</label>
+                        <input type="date" id="singleDate">
+                    </div>
+                    <div id="rangeDateWrapper" class="hidden">
+                        <label>Tarih Aralığı</label>
+                        <div class="range-inputs">
+                            <input type="date" id="startDate" placeholder="Başlangıç">
+                            <span class="range-separator">—</span>
+                            <input type="date" id="endDate" placeholder="Bitiş">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group purpose-group">
+                    <label for="purpose">Purpose</label>
+                    <input type="text" id="purpose" placeholder="Etkinlik / Amaç">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="asked">
+                        <span class="custom-checkbox"></span>
+                        Asked
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="confirmed">
+                        <span class="custom-checkbox"></span>
+                        Confirmed
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="paid">
+                        <span class="custom-checkbox"></span>
+                        Paid
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group euro-group">
+                    <label for="euro">€ (Günlük)</label>
+                    <input type="number" id="euro" min="0" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group notes-group">
+                    <label for="notes">Notlar</label>
+                    <textarea id="notes" rows="2" placeholder="Ek notlar..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="submitBtn">Ekle</button>
+                <button type="button" id="cancelBtn" class="btn-secondary hidden">İptal</button>
+            </div>
+        </form>
+
+        <div class="table-wrapper">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Dates</th>
+                        <th>Purpose</th>
+                        <th>Asked</th>
+                        <th>Confirmed</th>
+                        <th>Paid</th>
+                        <th>€</th>
+                        <th>Toplam</th>
+                        <th>Notlar</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="footer-actions">
+            <button id="exportBtn" class="btn-export">JSON Olarak İndir</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
