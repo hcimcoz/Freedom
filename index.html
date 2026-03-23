@@ -7,8 +7,36 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Hamdi - Freedom - Dates</h1>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1>Freedom</h1>
+            <p class="login-subtitle">Devam etmek için giriş yapın</p>
+            <form id="loginForm">
+                <div class="login-field">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="email@example.com" required>
+                </div>
+                <div class="login-field">
+                    <label for="loginPassword">Şifre</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <div id="loginError" class="login-error hidden"></div>
+                <button type="submit" id="loginBtn">Giriş Yap</button>
+                <button type="button" id="signupBtn" class="btn-signup">Kayıt Ol</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- App -->
+    <div id="appScreen" class="container hidden">
+        <div class="app-header">
+            <h1>Hamdi - Freedom - Dates</h1>
+            <div class="user-info">
+                <span id="userEmail"></span>
+                <button id="logoutBtn" class="btn-logout">Çıkış</button>
+            </div>
+        </div>
 
         <form id="entryForm">
             <div class="form-row">
@@ -104,7 +132,7 @@
         <div class="footer-actions">
             <button id="exportBtn" class="btn-export">JSON Olarak İndir</button>
         </div>
-    </div>
+    </div><!-- end appScreen -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="app.js"></script>

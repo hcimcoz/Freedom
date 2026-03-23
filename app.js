@@ -5,8 +5,17 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let entries = [];
 let editingId = null;
+let dateType = 'single';
 
 // DOM elements
+const loginScreen = document.getElementById('loginScreen');
+const appScreen = document.getElementById('appScreen');
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+const signupBtn = document.getElementById('signupBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const userEmailSpan = document.getElementById('userEmail');
+
 const form = document.getElementById('entryForm');
 const tableBody = document.getElementById('tableBody');
 const submitBtn = document.getElementById('submitBtn');
@@ -16,9 +25,105 @@ const toggleBtns = document.querySelectorAll('.toggle-btn');
 const singleDateWrapper = document.getElementById('singleDateWrapper');
 const rangeDateWrapper = document.getElementById('rangeDateWrapper');
 
-let dateType = 'single';
+// ========== AUTH ==========
 
-// --- Supabase CRUD ---
+async function checkSession() {
+    const { data: { session } } = await db.auth.getSession();
+    if (session) {
+        showApp(session.user);
+    } else {
+        showLogin();
+    }
+}
+
+function showLogin() {
+    loginScreen.classList.remove('hidden');
+    appScreen.classList.add('hidden');
+}
+
+function showApp(user) {
+    loginScreen.classList.add('hidden');
+    appScreen.classList.remove('hidden');
+    userEmailSpan.textContent = user.email;
+    loadEntries();
+}
+
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginError.classList.add('hidden');
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        loginError.textContent = 'Email veya şifre hatalı.';
+        loginError.classList.remove('hidden');
+        return;
+    }
+
+    showApp(data.user);
+});
+
+signupBtn.addEventListener('click', async () => {
+    loginError.classList.add('hidden');
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    if (password.length < 6) {
+        loginError.textContent = 'Şifre en az 6 karakter olmalı.';
+        loginError.classList.remove('hidden');
+        return;
+    }
+
+    // Check whitelist first
+    const { data: allowed } = await db
+        .from('allowed_users')
+        .select('email')
+        .eq('email', email)
+        .single();
+
+    if (!allowed) {
+        loginError.textContent = 'Bu email adresi yetkili değil.';
+        loginError.classList.remove('hidden');
+        return;
+    }
+
+    const { data, error } = await db.auth.signUp({ email, password });
+
+    if (error) {
+        loginError.textContent = error.message;
+        loginError.classList.remove('hidden');
+        return;
+    }
+
+    if (data.user && data.session) {
+        showApp(data.user);
+    } else {
+        loginError.textContent = 'Kayıt başarılı! Email adresinize gelen doğrulama linkine tıklayın.';
+        loginError.classList.remove('hidden');
+        loginError.style.background = 'rgba(34, 197, 94, 0.15)';
+        loginError.style.color = '#4ade80';
+    }
+});
+
+logoutBtn.addEventListener('click', async () => {
+    await db.auth.signOut();
+    showLogin();
+});
+
+// Listen for auth changes
+db.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+        showApp(session.user);
+    } else if (event === 'SIGNED_OUT') {
+        showLogin();
+    }
+});
+
+// ========== CRUD ==========
 
 async function loadEntries() {
     const { data, error } = await db
@@ -77,7 +182,7 @@ async function removeEntry(id) {
     return true;
 }
 
-// --- Date formatting ---
+// ========== FORMATTING ==========
 
 function formatDate(dateStr) {
     if (!dateStr) return '';
@@ -115,18 +220,18 @@ function getDayCount(entry) {
 
 function formatEuro(value) {
     if (value == null || value === '' || isNaN(value)) return '';
-    return Number(value).toFixed(2) + ' €';
+    return Number(value).toFixed(2) + ' \u20AC';
 }
 
 function calcTotal(entry) {
     if (entry.euro == null || entry.euro === '' || isNaN(entry.euro)) return '';
-    return (getDayCount(entry) * Number(entry.euro)).toFixed(2) + ' €';
+    return (getDayCount(entry) * Number(entry.euro)).toFixed(2) + ' \u20AC';
 }
 
 function statusBadge(value) {
-    if (value === '✅') return '<span class="status-badge yes">✅</span>';
-    if (value === 'İptal') return '<span class="status-badge cancelled">İptal</span>';
-    return '<span class="status-badge no">—</span>';
+    if (value === '\u2705') return '<span class="status-badge yes">\u2705</span>';
+    if (value === '\u0130ptal' || value === 'İptal') return '<span class="status-badge cancelled">İptal</span>';
+    return '<span class="status-badge no">\u2014</span>';
 }
 
 function escapeHtml(str) {
@@ -136,7 +241,7 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
-// --- Render ---
+// ========== RENDER ==========
 
 function render() {
     if (entries.length === 0) {
@@ -165,7 +270,7 @@ function render() {
     `).join('');
 }
 
-// --- Toggle date type ---
+// ========== UI EVENTS ==========
 
 toggleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -182,8 +287,6 @@ toggleBtns.forEach(btn => {
         }
     });
 });
-
-// --- Form submit ---
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -236,8 +339,6 @@ form.addEventListener('submit', async (e) => {
     resetForm();
 });
 
-// --- Edit ---
-
 function editEntryUI(id) {
     const entry = entries.find(e => e.id === id);
     if (!entry) return;
@@ -272,15 +373,11 @@ function editEntryUI(id) {
     form.scrollIntoView({ behavior: 'smooth' });
 }
 
-// --- Delete ---
-
 async function deleteEntryUI(id) {
     if (!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
     const success = await removeEntry(id);
     if (success) await loadEntries();
 }
-
-// --- Cancel edit ---
 
 cancelBtn.addEventListener('click', () => {
     editingId = null;
@@ -299,8 +396,6 @@ function resetForm() {
     rangeDateWrapper.classList.add('hidden');
 }
 
-// --- Export ---
-
 exportBtn.addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -311,6 +406,6 @@ exportBtn.addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// --- Init ---
+// ========== INIT ==========
 
-loadEntries();
+checkSession();
