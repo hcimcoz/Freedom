@@ -1,34 +1,10 @@
-const STORAGE_KEY = 'freedom_dates_v2';
+const SUPABASE_URL = 'https://zlyvcvgystrqrgrcrala.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpseXZjdmd5c3RycXJncmNyYWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMDAwNDEsImV4cCI6MjA4OTg3NjA0MX0.syAtrCFZD72vgrZl0pIfmDT_AOTuyimhayXyhC5GBz4';
 
-const initialData = [
-    { id: 1, dateType: 'range', startDate: '2025-04-19', endDate: '2025-04-27', purpose: 'Kreta', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 2, dateType: 'range', startDate: '2025-05-03', endDate: '2025-05-04', purpose: 'Eva&Markus DG', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 3, dateType: 'single', startDate: '2025-05-16', endDate: '', purpose: 'Yeşim', asked: '✅', confirmed: '✅', paid: '✅', notes: "Üstteki iptal oldu, onun yerine 21'inde Hamdi'ye gitti" },
-    { id: 4, dateType: 'single', startDate: '2025-05-20', endDate: '', purpose: 'Sean DG', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 5, dateType: 'range', startDate: '2025-05-23', endDate: '2025-05-25', purpose: 'OMTC maç ve Köln', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 6, dateType: 'range', startDate: '2025-06-03', endDate: '2025-06-04', purpose: 'Ismo - Frankfurt', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 7, dateType: 'range', startDate: '2025-06-12', endDate: '2025-06-16', purpose: 'Londra', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 8, dateType: 'range', startDate: '2025-07-03', endDate: '2025-07-04', purpose: 'Holger ÖYD - Köln', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 9, dateType: 'single', startDate: '2025-07-08', endDate: '', purpose: 'Kolonoskopi', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 10, dateType: 'single', startDate: '2025-07-15', endDate: '', purpose: 'Kolonoskopi', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 11, dateType: 'range', startDate: '2025-07-21', endDate: '2025-07-30', purpose: 'Scotland', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 12, dateType: 'range', startDate: '2025-08-09', endDate: '2025-08-12', purpose: "Yamanel'ler", asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 13, dateType: 'range', startDate: '2025-08-15', endDate: '2025-08-18', purpose: "Yusuf'larla Paris", asked: 'İptal', confirmed: '', paid: '', notes: '' },
-    { id: 14, dateType: 'range', startDate: '2025-09-28', endDate: '2025-10-06', purpose: "Burak'larla tekne", asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 15, dateType: 'range', startDate: '2025-10-21', endDate: '2025-10-27', purpose: "Saadet'lerle Belçika", asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 16, dateType: 'single', startDate: '2025-10-17', endDate: '', purpose: 'Frankfurter Buchmesse', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 17, dateType: 'range', startDate: '2025-11-27', endDate: '2025-12-01', purpose: 'Londra', asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 18, dateType: 'range', startDate: '2026-02-15', endDate: '2026-02-26', purpose: 'François - Benin', asked: '✅', confirmed: '✅', paid: '✅', notes: "15.10.25'te, bir üstteki 1 tek gün + bu seyahatin 5 gününü ödedim. 02.12.25'te de bu seyahatin kalan 7 gününü ödedim." },
-    { id: 19, dateType: 'single', startDate: '2026-04-18', endDate: '', purpose: "IKEA'ya gittik", asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 20, dateType: 'single', startDate: '2026-03-02', endDate: '', purpose: "Markus'larla sinema", asked: '✅', confirmed: '✅', paid: '✅', notes: '' },
-    { id: 21, dateType: 'range', startDate: '2026-03-05', endDate: '2026-03-10', purpose: 'Londra', asked: '✅', confirmed: '✅', paid: '✅', notes: 'İptal olan 12 günlük Benin seyahatinin 6 gününü buraya kullandık. 6 gün daha alacağımız var.' },
-    { id: 22, dateType: 'single', startDate: '2026-03-24', endDate: '', purpose: "Yeşim'le sinema", asked: '✅', confirmed: '✅', paid: '✅', notes: "17.03.2026'da bugünün parasını ve Nisan'daki Krakow seyahati için kalan 2 gün borcumuzu, üstüne de Şubat'ı iptal ettiğimiz için üzülüp 100€ gönderdim." },
-    { id: 23, dateType: 'range', startDate: '2026-04-20', endDate: '2026-04-27', purpose: 'Prag-Krakow-Dresden', asked: '✅', confirmed: '✅', paid: '', notes: '' },
-];
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let entries = [];
 let editingId = null;
-let nextId = 100;
 
 // DOM elements
 const form = document.getElementById('entryForm');
@@ -40,28 +16,69 @@ const toggleBtns = document.querySelectorAll('.toggle-btn');
 const singleDateWrapper = document.getElementById('singleDateWrapper');
 const rangeDateWrapper = document.getElementById('rangeDateWrapper');
 
-// State
 let dateType = 'single';
 
-// Init
-function init() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-        entries = JSON.parse(stored);
-        nextId = Math.max(...entries.map(e => e.id), 99) + 1;
-    } else {
-        entries = initialData;
-        nextId = 100;
-        save();
+// --- Supabase CRUD ---
+
+async function loadEntries() {
+    const { data, error } = await db
+        .from('entries')
+        .select('*')
+        .order('start_date', { ascending: true });
+
+    if (error) {
+        console.error('Load error:', error);
+        return;
     }
+    entries = data;
     render();
 }
 
-function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+async function insertEntry(entry) {
+    const { data, error } = await db
+        .from('entries')
+        .insert([entry])
+        .select();
+
+    if (error) {
+        console.error('Insert error:', error);
+        alert('Kayıt eklenirken hata oluştu.');
+        return null;
+    }
+    return data[0];
 }
 
-// Date formatting
+async function updateEntry(id, entry) {
+    const { data, error } = await db
+        .from('entries')
+        .update(entry)
+        .eq('id', id)
+        .select();
+
+    if (error) {
+        console.error('Update error:', error);
+        alert('Kayıt güncellenirken hata oluştu.');
+        return null;
+    }
+    return data[0];
+}
+
+async function removeEntry(id) {
+    const { error } = await db
+        .from('entries')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error('Delete error:', error);
+        alert('Kayıt silinirken hata oluştu.');
+        return false;
+    }
+    return true;
+}
+
+// --- Date formatting ---
+
 function formatDate(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr + 'T00:00:00');
@@ -72,11 +89,11 @@ function formatDate(dateStr) {
 }
 
 function formatDateDisplay(entry) {
-    if (entry.dateType === 'single') {
-        return formatDate(entry.startDate);
+    if (entry.date_type === 'single') {
+        return formatDate(entry.start_date);
     }
-    const s = new Date(entry.startDate + 'T00:00:00');
-    const e = new Date(entry.endDate + 'T00:00:00');
+    const s = new Date(entry.start_date + 'T00:00:00');
+    const e = new Date(entry.end_date + 'T00:00:00');
     const sd = String(s.getDate()).padStart(2, '0');
     const sm = String(s.getMonth() + 1).padStart(2, '0');
     const ed = String(e.getDate()).padStart(2, '0');
@@ -89,16 +106,10 @@ function formatDateDisplay(entry) {
     return `${sd}.${sm}-${ed}.${em}.${ey}`;
 }
 
-function statusBadge(value) {
-    if (value === '✅') return '<span class="status-badge yes">✅</span>';
-    if (value === 'İptal') return '<span class="status-badge cancelled">İptal</span>';
-    return '<span class="status-badge no">—</span>';
-}
-
 function getDayCount(entry) {
-    if (entry.dateType === 'single') return 1;
-    const s = new Date(entry.startDate + 'T00:00:00');
-    const e = new Date(entry.endDate + 'T00:00:00');
+    if (entry.date_type === 'single') return 1;
+    const s = new Date(entry.start_date + 'T00:00:00');
+    const e = new Date(entry.end_date + 'T00:00:00');
     return Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1;
 }
 
@@ -112,7 +123,21 @@ function calcTotal(entry) {
     return (getDayCount(entry) * Number(entry.euro)).toFixed(2) + ' €';
 }
 
-// Render table
+function statusBadge(value) {
+    if (value === '✅') return '<span class="status-badge yes">✅</span>';
+    if (value === 'İptal') return '<span class="status-badge cancelled">İptal</span>';
+    return '<span class="status-badge no">—</span>';
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// --- Render ---
+
 function render() {
     if (entries.length === 0) {
         tableBody.innerHTML = `
@@ -122,11 +147,7 @@ function render() {
         return;
     }
 
-    const sorted = [...entries].sort((a, b) => {
-        return new Date(a.startDate) - new Date(b.startDate);
-    });
-
-    tableBody.innerHTML = sorted.map(entry => `
+    tableBody.innerHTML = entries.map(entry => `
         <tr data-id="${entry.id}">
             <td class="date-cell">${formatDateDisplay(entry)}</td>
             <td class="purpose-cell">${escapeHtml(entry.purpose)}</td>
@@ -137,21 +158,15 @@ function render() {
             <td class="total-cell">${calcTotal(entry)}</td>
             <td class="notes-cell">${escapeHtml(entry.notes)}</td>
             <td class="actions-cell">
-                <button class="action-btn edit" onclick="editEntry(${entry.id})" title="Düzenle">✏️</button>
-                <button class="action-btn delete" onclick="deleteEntry(${entry.id})" title="Sil">🗑️</button>
+                <button class="action-btn edit" onclick="editEntryUI(${entry.id})" title="Düzenle">✏️</button>
+                <button class="action-btn delete" onclick="deleteEntryUI(${entry.id})" title="Sil">🗑️</button>
             </td>
         </tr>
     `).join('');
 }
 
-function escapeHtml(str) {
-    if (!str) return '';
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
+// --- Toggle date type ---
 
-// Toggle date type
 toggleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         toggleBtns.forEach(b => b.classList.remove('active'));
@@ -168,63 +183,62 @@ toggleBtns.forEach(btn => {
     });
 });
 
-// Form submit
-form.addEventListener('submit', (e) => {
+// --- Form submit ---
+
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const startDate = dateType === 'single'
+    const start_date = dateType === 'single'
         ? document.getElementById('singleDate').value
         : document.getElementById('startDate').value;
-    const endDate = dateType === 'range'
+    const end_date = dateType === 'range'
         ? document.getElementById('endDate').value
-        : '';
+        : null;
 
-    if (!startDate) {
+    if (!start_date) {
         alert('Lütfen bir tarih girin.');
         return;
     }
-    if (dateType === 'range' && !endDate) {
+    if (dateType === 'range' && !end_date) {
         alert('Lütfen bitiş tarihini girin.');
         return;
     }
 
-    const purpose = document.getElementById('purpose').value.trim();
-    const asked = document.getElementById('asked').checked ? '✅' : '';
-    const confirmed = document.getElementById('confirmed').checked ? '✅' : '';
-    const paid = document.getElementById('paid').checked ? '✅' : '';
-    const euro = document.getElementById('euro').value;
-    const notes = document.getElementById('notes').value.trim();
+    const euroVal = document.getElementById('euro').value;
 
     const entry = {
-        id: editingId || nextId++,
-        dateType,
-        startDate,
-        endDate,
-        purpose,
-        asked,
-        confirmed,
-        paid,
-        euro: euro !== '' ? parseFloat(euro) : '',
-        notes,
+        date_type: dateType,
+        start_date,
+        end_date,
+        purpose: document.getElementById('purpose').value.trim(),
+        asked: document.getElementById('asked').checked ? '✅' : '',
+        confirmed: document.getElementById('confirmed').checked ? '✅' : '',
+        paid: document.getElementById('paid').checked ? '✅' : '',
+        euro: euroVal !== '' ? parseFloat(euroVal) : null,
+        notes: document.getElementById('notes').value.trim(),
     };
 
+    submitBtn.disabled = true;
+
     if (editingId) {
-        const idx = entries.findIndex(e => e.id === editingId);
-        if (idx !== -1) entries[idx] = entry;
-        editingId = null;
-        submitBtn.textContent = 'Ekle';
-        cancelBtn.classList.add('hidden');
+        const result = await updateEntry(editingId, entry);
+        if (result) {
+            editingId = null;
+            submitBtn.textContent = 'Ekle';
+            cancelBtn.classList.add('hidden');
+        }
     } else {
-        entries.push(entry);
+        await insertEntry(entry);
     }
 
-    save();
-    render();
+    submitBtn.disabled = false;
+    await loadEntries();
     resetForm();
 });
 
-// Edit
-function editEntry(id) {
+// --- Edit ---
+
+function editEntryUI(id) {
     const entry = entries.find(e => e.id === id);
     if (!entry) return;
 
@@ -232,8 +246,7 @@ function editEntry(id) {
     submitBtn.textContent = 'Güncelle';
     cancelBtn.classList.remove('hidden');
 
-    // Set date type
-    dateType = entry.dateType;
+    dateType = entry.date_type;
     toggleBtns.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.type === dateType);
     });
@@ -241,33 +254,34 @@ function editEntry(id) {
     if (dateType === 'single') {
         singleDateWrapper.classList.remove('hidden');
         rangeDateWrapper.classList.add('hidden');
-        document.getElementById('singleDate').value = entry.startDate;
+        document.getElementById('singleDate').value = entry.start_date;
     } else {
         singleDateWrapper.classList.add('hidden');
         rangeDateWrapper.classList.remove('hidden');
-        document.getElementById('startDate').value = entry.startDate;
-        document.getElementById('endDate').value = entry.endDate;
+        document.getElementById('startDate').value = entry.start_date;
+        document.getElementById('endDate').value = entry.end_date;
     }
 
-    document.getElementById('purpose').value = entry.purpose;
+    document.getElementById('purpose').value = entry.purpose || '';
     document.getElementById('asked').checked = entry.asked === '✅';
     document.getElementById('confirmed').checked = entry.confirmed === '✅';
     document.getElementById('paid').checked = entry.paid === '✅';
-    document.getElementById('euro').value = entry.euro != null && entry.euro !== '' ? entry.euro : '';
+    document.getElementById('euro').value = entry.euro != null ? entry.euro : '';
     document.getElementById('notes').value = entry.notes || '';
 
     form.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Delete
-function deleteEntry(id) {
+// --- Delete ---
+
+async function deleteEntryUI(id) {
     if (!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
-    entries = entries.filter(e => e.id !== id);
-    save();
-    render();
+    const success = await removeEntry(id);
+    if (success) await loadEntries();
 }
 
-// Cancel edit
+// --- Cancel edit ---
+
 cancelBtn.addEventListener('click', () => {
     editingId = null;
     submitBtn.textContent = 'Ekle';
@@ -285,7 +299,8 @@ function resetForm() {
     rangeDateWrapper.classList.add('hidden');
 }
 
-// Export
+// --- Export ---
+
 exportBtn.addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -296,5 +311,6 @@ exportBtn.addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// Start
-init();
+// --- Init ---
+
+loadEntries();
